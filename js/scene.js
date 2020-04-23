@@ -166,6 +166,9 @@ function createScene(){
     light.shadow.camera.far = 1000;
     scene.add(light);
   }
+  var light = new THREE.DirectionalLight( 0xffffff );
+  light.position.set( 0, 1, 1 ).normalize();
+  scene.add(light);
 
   // radius of flashlight circle 
   circleGeo = new THREE.CircleGeometry(calcRad(health), 64, 3);

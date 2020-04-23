@@ -1,17 +1,34 @@
 function Background(scene) {
+  
+  
+  console.log("here")
+  // create floor
+  var planeGeometry = new THREE.PlaneGeometry(720, 720, 300, 300);
+  // planeGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 
-  var planeGeometry = new THREE.PlaneGeometry(1000, 1000, 4);
-  // var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x3c0047 } );
-  // var planeMaterial = new THREE.MeshBasicMaterial({color: 0x3c0047});
-  var planeMaterial = new THREE.MeshBasicMaterial({color: 0xace7ff})
-  ground = new THREE.Mesh( planeGeometry, planeMaterial );
+  // merge floor vertices
+  // planeGeometry.mergeVertices();
+
+  // get the vertices
+  var verticesLength = planeGeometry.vertices.length;
+
+  // create an array to store new data associated to each vertex
+  for (var i = 0; i < verticesLength; i++) {
+    planeGeometry.vertices[i].y += 5 + Math.random()*15;
+    planeGeometry.vertices[i].z += Math.random()*1;
+  }
+   
+  var mat = new THREE.MeshPhongMaterial({
+    color: 0xb28dff,
+    transparent:true,
+    opacity:0.9
+	});
+
+	var ground = new THREE.Mesh(planeGeometry, mat);
   ground.receiveShadow = true;
   ground.castShadow = false;
   ground.rotation.x = -Math.PI/2;
-  // console.log("ground pos")
-  // console.log(ground.position.y)
   scene.add(ground);
-  // console.log(ground)
 
   // set up back wall
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
