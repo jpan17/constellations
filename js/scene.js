@@ -13,7 +13,7 @@ var light;
 var hemisphere;
 var ambient;
 var sceneSubject;
-var starNum = 300;
+var starNum = 20000;
 
 // colors
 var darkBlue = 0x001029;
@@ -78,7 +78,6 @@ function init() {
 
   clock = new THREE.Clock();
   clock.start();
-  health = 100;
 
 	// set up the scene
   createScene();
@@ -143,13 +142,20 @@ function createScene(){
   scene.fog = new THREE.FogExp2( lightGreen, 0.002 )
 
   // 7. Stars
-  var starGeometry = new THREE.SphereGeometry(0.05, 20, 20)
+  var starGeometry = new THREE.SphereGeometry(0.1, 20, 20)
   var starMaterial = new THREE.MeshBasicMaterial( {
     color: lightGreen,
     side: THREE.DoubleSide
   })
 
-
+  for (var i = 0; i < starNum; i++) {
+    var star = new THREE.Mesh(starGeometry, starMaterial);
+    var x = -500 + Math.random() * 1000;
+    var y = -500 + Math.random() * 1000;
+    var z = -500 + Math.random() * 1000;
+    star.position.set(x, y, z);
+    scene.add(star);
+  }
 
   // create the background
   sceneSubject = [new Background(scene)];
