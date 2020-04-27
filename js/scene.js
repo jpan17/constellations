@@ -12,13 +12,6 @@ var clock;
 var light;
 var sceneSubject;
 
-// objects related to timer/health
-var circle;
-var circleGeo; 
-var circleMat;
-var circleEffect;
-var effectTime = 0;
-
 /****************************** FLAGS *****************************************/
 var random = false;
 var DEBUG = false;
@@ -136,16 +129,6 @@ function createScene(){
   light.position.set( 0, 1, 1 ).normalize();
   scene.add(light);
 
-  // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(64, 64, 3);
-  circleGeo.vertices.shift();
-  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5,});
-  circle = new THREE.LineLoop(circleGeo, circleMat);
-  circle.rotation.x = -Math.PI/2;
-  circle.visible = false;
-  scene.add(circle);
-  circleEffect = new CircleEffect(scene);
-
   // create the background
   sceneSubject = [new Background(scene)];
 
@@ -154,13 +137,6 @@ function createScene(){
 
 function animate(){
     var delta = clock.getDelta();
-    
-    // update circle position
-    let currentPos = controls.getObject().position;
-    circleGeo = new THREE.CircleGeometry(64, 64, 3);
-    circleGeo.vertices.shift();
-    circle.geometry = circleGeo;
-    circle.position.set(currentPos.x, 0.1, currentPos.z);
 
     controls.animatePlayer(delta);
 
