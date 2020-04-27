@@ -160,42 +160,6 @@ THREE.PlayerControls = function(camera, domElement) {
 		return undefined;
 	}
 
-	this.detectDoorFound = function() {
-		let currentPos = controls.getObject().position;
-
-		if (scene.children.indexOf(doorObject.object) < 0) {
-			return false;
-		}
-
-		let dist = new THREE.Vector3().subVectors(doorObject.object.position, currentPos).length();
-		if (dist < PLAYERDOORDIST) {
-			doorFound = true;
-			return true;
-		}
-		return false;
-
-	}
-
-	this.detectKeyFound = function() {
-
-		let currentPos = controls.getObject().position;
-		if (scene.children.indexOf(key) <= 0) {
-			return false;
-		}
-		let dist = new THREE.Vector3().subVectors(key.position, currentPos).length();
-		if (dist < PLAYERCOLLISIONDIST) {
-			console.log("GOT A KEY");
-			// remove the key
-			let removeIndex = scene.children.indexOf(key);
-			scene.children.splice(removeIndex, 1);
-			scene.remove(key);
-			foundKey = true;
-			return true;
-		}
-		return false;
-
-	}
-
 	this.animatePlayer = function(delta) {
 		// Gradual slowdown
 		//console.log(this.getDirection());
@@ -205,13 +169,6 @@ THREE.PlayerControls = function(camera, domElement) {
 		// slow down based on friction
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
-
-		// to determine whether the player died
-		if (!doorFound && detectPlayerDeath() == true) {
-			// alert("test")
-			endGame();
-			return;
-		}
 
 		// get change in velocity based on 
 		var dir = this.getDirection();
@@ -232,29 +189,6 @@ THREE.PlayerControls = function(camera, domElement) {
 		if (this.moveRight) {
 			deltaV.x -= dir.z;
 			deltaV.z += dir.x;
-		}
-
-		// var doorFound = this.detectDoorFound(deltaV);
-		// var keyFound = this.detectKeyFound(deltaV);
-		this.detectDoorFound();
-		this.detectKeyFound();
-
-		// to determine whether the game ends
-		if (doorFound && foundKey) {
-			wonGame();
-			return;
-		}
-
-		// if the door is found without picking up the key first
-		if (doorFound && !foundKey && firstTimeDoor) {
-			doorFound = false;
-			firstTimeDoor = false;
-			gotDoor();
-		}
-
-		if (foundKey && firstTimeKey) {
-			firstTimeKey = false;
-			gotKey();
 		}
 
 		var hits = this.playerCollision(deltaV);
