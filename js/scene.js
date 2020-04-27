@@ -10,14 +10,18 @@ var clock;
 
 // objects related to scene objects
 var light;
+var hemisphere;
+var ambient;
 var sceneSubject;
+var starNum = 20000;
 
-// objects related to timer/health
-var circle;
-var circleGeo; 
-var circleMat;
-var circleEffect;
-var effectTime = 0;
+// colors
+var darkBlue = 0x001029;
+var blue = 0x0f67d4;
+var lightBlue = 0x39c1e3;
+var lightGreen = 0x26c9a3;
+var green = 0x149174;
+var darkGreen = 0x04362a;
 
 /****************************** FLAGS *****************************************/
 var random = false;
@@ -74,7 +78,6 @@ function init() {
 
   clock = new THREE.Clock();
   clock.start();
-  health = 100;
 
 	// set up the scene
   createScene();
@@ -100,7 +103,7 @@ function createScene(){
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
-  renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
+  renderer.setClearColor(0xffffff, 1); // enable fog (??)
   
   renderer.shadowMap.enabled = true;//enable shadow
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -113,38 +116,46 @@ function createScene(){
   controls.getObject().position.set(0, 0, 0);
   scene.add(controls.getObject());
 
-	// 4. lights
-  if (DEBUG == true) {
-    console.log("test")
-    scene.add(new THREE.AmbientLight(0x666666));
-    light = new THREE.DirectionalLight(0xe3e8f2, 1.75);
-    light.position.set(50, 200, 100);
-    light.position.multiplyScalar(1.3);
-    light.castShadow = true;
-    light.shadow.mapSize.width = 1024;
-    light.shadow.mapSize.height = 1024;
+  // 4. lights
+  hemisphere = new THREE.HemisphereLight( lightBlue, darkBlue, 1);
+  scene.add(hemisphere);
 
-    let d = 300;
-    light.shadow.camera.left = -d;
-    light.shadow.camera.right = d;
-    light.shadow.camera.top = d;
-    light.shadow.camera.bottom = -d;
-    light.shadow.camera.far = 1000;
-    scene.add(light);
+  ambient = new THREE.AmbientLight( darkBlue, 1 );
+  scene.add(ambient);
+
+  light = new THREE.DirectionalLight( lightBlue );
+  light.rotateOnAxis(new THREE.Vector3(0, 0, 0), -Math.PI);
+  light.castShadow = true;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  light.shadow.mapSize.width = 1028;
+  light.shadow.mapSize.height = 1028;
+  light.shadow.camera.near = 1;
+  light.shadow.camera.far = 1000;
+  light.shadow.camera.left = -100;
+  light.shadow.camera.right = 100;
+  light.shadow.camera.top = 100;
+  light.shadow.camera.bottom = -100
+  scene.add(light)
+
+  // 6. Fog
+  scene.fog = new THREE.FogExp2( lightGreen, 0.002 )
+
+  // 7. Stars
+  var starGeometry = new THREE.SphereGeometry(0.1, 20, 20)
+  var starMaterial = new THREE.MeshBasicMaterial( {
+    color: lightGreen,
+    side: THREE.DoubleSide
+  })
+
+  for (var i = 0; i < starNum; i++) {
+    var star = new THREE.Mesh(starGeometry, starMaterial);
+    var x = -500 + Math.random() * 1000;
+    var y = -500 + Math.random() * 1000;
+    var z = -500 + Math.random() * 1000;
+    star.position.set(x, y, z);
+    scene.add(star);
   }
-  var light = new THREE.DirectionalLight( 0xffffff );
-  light.position.set( 0, 1, 1 ).normalize();
-  scene.add(light);
-
-  // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(64, 64, 3);
-  circleGeo.vertices.shift();
-  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5,});
-  circle = new THREE.LineLoop(circleGeo, circleMat);
-  circle.rotation.x = -Math.PI/2;
-  circle.visible = false;
-  scene.add(circle);
-  circleEffect = new CircleEffect(scene);
 
   // create the background
   sceneSubject = [new Background(scene)];
@@ -152,15 +163,14 @@ function createScene(){
 	window.addEventListener('resize', onWindowResize, false);//resize callback
 }
 
+function calculateStarPosition(mesh, angle, radius, y) {
+  const x = radius * Math.cos(angle)
+  const z = radius * Math.sin(angle)
+  mesh.position.set(x, y, z)
+}
+
 function animate(){
     var delta = clock.getDelta();
-    
-    // update circle position
-    let currentPos = controls.getObject().position;
-    circleGeo = new THREE.CircleGeometry(64, 64, 3);
-    circleGeo.vertices.shift();
-    circle.geometry = circleGeo;
-    circle.position.set(currentPos.x, 0.1, currentPos.z);
 
     controls.animatePlayer(delta);
 
