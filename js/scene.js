@@ -29,6 +29,9 @@ var leftDist = -200;
 var rightDist = 200;
 var frontDist = -200;
 
+// stars
+var stars;
+
 // obstacles in the game
 var collidableObjects = []; // An array of collidable objects used later
 var MAXLIGHTORBS = 70;
@@ -129,10 +132,31 @@ function createScene(){
   light.position.set( 0, 1, 1 ).normalize();
   scene.add(light);
 
+  // 5. Fog
+  scene.fog = new THREE.FogExp2( 0xfffbbb, 0.01 )
+
+  // 6. Stars
+  // stars = _.times(853, i => {
+  //   // small white dot
+  //   const star = new THREE.Mesh(starGeometry, starMaterial)
+  //   const angle = _.random(0, 2 * Math.PI)
+  //   const radius = _.random(outerRadius / 10, outerRadius / 2)
+  //   const y = _.random(-1, outerRadius / 2)
+  //   this.calculateStarPosition(star, angle, radius, y)
+  //   scene.add( star )
+  //   return {mesh: star, angle, radius, y}
+  // })
+
   // create the background
   sceneSubject = [new Background(scene)];
 
 	window.addEventListener('resize', onWindowResize, false);//resize callback
+}
+
+function calculateStarPosition(mesh, angle, radius, y) {
+  const x = radius * Math.cos(angle)
+  const z = radius * Math.sin(angle)
+  mesh.position.set(x, y, z)
 }
 
 function animate(){
