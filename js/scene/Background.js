@@ -1,7 +1,7 @@
 function Background(scene) {
 
   // create floor
-  var planeGeometry = new THREE.PlaneGeometry(720, 720, 300, 300);
+  var planeGeometry = new THREE.PlaneGeometry(360, 360, 150, 150);
   // planeGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 
   // merge floor vertices
@@ -12,14 +12,16 @@ function Background(scene) {
 
   // create an array to store new data associated to each vertex
   for (var i = 0; i < verticesLength; i++) {
-    planeGeometry.vertices[i].y += 5 + Math.random()*15;
-    planeGeometry.vertices[i].z += Math.random()*1.5;
+    planeGeometry.vertices[i].y += + Math.random()*5;
+    planeGeometry.vertices[i].z += Math.random()*1;
   }
    
   var mat = new THREE.MeshStandardMaterial({
-    color: 0xb28dff,
+    color: 0x001029,
+    side: THREE.DoubleSide,
     flatShading: true,
     roughness: 1.0,
+    wireframe: false,
     // transparent:true,
     // opacity:0.9
 	});
@@ -32,61 +34,14 @@ function Background(scene) {
 
   // set up sphere container
   var sky = new THREE.Mesh(
-    new THREE.SphereGeometry(360, 20, 20),
+    new THREE.SphereGeometry(180, 20, 20),
     new THREE.MeshStandardMaterial( {
-      color: 0xffffaa,
+      color: 0x0f67d4,
       side: THREE.BackSide,
     } )
   )
   scene.add(sky)
   collidableObjects.push(sky)
-
-  // // set up back wall
-  // var wallGeometry = new THREE.PlaneGeometry(600, 600);
-  // // var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
-  // // var wallMaterial = new THREE.MeshBasicMaterial({color: 0xdfaff7});
-  // var wallMaterial = new THREE.MeshBasicMaterial({color: 0xb28dff});
-  // // wallMaterial.lights = true;
-
-  // wallMaterial.fog = true;
-  // backWall = new THREE.Mesh(wallGeometry, wallMaterial);
-  // backWall.rotation.y = Math.PI;
-  // backWall.recieveShadow = true;
-  // // backWall.castShadow = true;
-  // backWall.position.y = 50;
-  // backWall.position.z = backDist;
-  // scene.add(backWall);
-  // collidableObjects.push(backWall);
-
-  // // right wall
-  // rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
-  // rightWall.recieveShadow = true;
-  // // rightWall.castShadow = true;
-  // rightWall.rotation.y = -Math.PI/2;
-  // rightWall.position.x = rightDist;
-  // rightWall.position.y = 50;
-  // scene.add(rightWall);
-  // collidableObjects.push(rightWall);
-
-  // // left wall
-  // leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
-  // leftWall.recieveShadow = true;
-  // // leftWall.castShadow = true;
-  // leftWall.rotation.y = Math.PI/2;
-  // leftWall.position.x = leftDist;
-  // leftWall.position.y = 50;
-  // scene.add(leftWall);
-  // collidableObjects.push(leftWall);
-
-  // // front wall
-  // frontWall = new THREE.Mesh(wallGeometry, wallMaterial);
-  // frontWall.recieveShadow = true;
-  // // frontWall.castShadow = true;
-  // frontWall.position.y = 50;
-  // frontWall.position.z = frontDist;
-  // scene.add(frontWall);
-  // collidableObjects.push(frontWall);
-
 
   this.update = function(time) {
 

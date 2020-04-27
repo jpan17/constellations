@@ -10,7 +10,18 @@ var clock;
 
 // objects related to scene objects
 var light;
+var hemisphere;
+var ambient;
 var sceneSubject;
+var starNum = 300;
+
+// colors
+var darkBlue = 0x001029;
+var blue = 0x0f67d4;
+var lightBlue = 0x39c1e3;
+var lightGreen = 0x26c9a3;
+var green = 0x149174;
+var darkGreen = 0x04362a;
 
 /****************************** FLAGS *****************************************/
 var random = false;
@@ -28,9 +39,6 @@ var backDist = 200;
 var leftDist = -200;
 var rightDist = 200;
 var frontDist = -200;
-
-// stars
-var stars;
 
 // obstacles in the game
 var collidableObjects = []; // An array of collidable objects used later
@@ -96,7 +104,7 @@ function createScene(){
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
-  renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
+  renderer.setClearColor(0xffffff, 1); // enable fog (??)
   
   renderer.shadowMap.enabled = true;//enable shadow
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -109,43 +117,39 @@ function createScene(){
   controls.getObject().position.set(0, 0, 0);
   scene.add(controls.getObject());
 
-	// 4. lights
-  if (DEBUG == true) {
-    console.log("test")
-    scene.add(new THREE.AmbientLight(0x666666));
-    light = new THREE.DirectionalLight(0xe3e8f2, 1.75);
-    light.position.set(50, 200, 100);
-    light.position.multiplyScalar(1.3);
-    light.castShadow = true;
-    light.shadow.mapSize.width = 1024;
-    light.shadow.mapSize.height = 1024;
+  // 4. lights
+  hemisphere = new THREE.HemisphereLight( lightBlue, darkBlue, 1);
+  scene.add(hemisphere);
 
-    let d = 300;
-    light.shadow.camera.left = -d;
-    light.shadow.camera.right = d;
-    light.shadow.camera.top = d;
-    light.shadow.camera.bottom = -d;
-    light.shadow.camera.far = 1000;
-    scene.add(light);
-  }
-  var light = new THREE.DirectionalLight( 0xffffff );
-  light.position.set( 0, 1, 1 ).normalize();
-  scene.add(light);
+  ambient = new THREE.AmbientLight( darkBlue, 1 );
+  scene.add(ambient);
 
-  // 5. Fog
-  scene.fog = new THREE.FogExp2( 0xfffbbb, 0.01 )
+  light = new THREE.DirectionalLight( lightBlue );
+  light.rotateOnAxis(new THREE.Vector3(0, 0, 0), -Math.PI);
+  light.castShadow = true;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  light.shadow.mapSize.width = 1028;
+  light.shadow.mapSize.height = 1028;
+  light.shadow.camera.near = 1;
+  light.shadow.camera.far = 1000;
+  light.shadow.camera.left = -100;
+  light.shadow.camera.right = 100;
+  light.shadow.camera.top = 100;
+  light.shadow.camera.bottom = -100
+  scene.add(light)
 
-  // 6. Stars
-  // stars = _.times(853, i => {
-  //   // small white dot
-  //   const star = new THREE.Mesh(starGeometry, starMaterial)
-  //   const angle = _.random(0, 2 * Math.PI)
-  //   const radius = _.random(outerRadius / 10, outerRadius / 2)
-  //   const y = _.random(-1, outerRadius / 2)
-  //   this.calculateStarPosition(star, angle, radius, y)
-  //   scene.add( star )
-  //   return {mesh: star, angle, radius, y}
-  // })
+  // 6. Fog
+  scene.fog = new THREE.FogExp2( lightGreen, 0.002 )
+
+  // 7. Stars
+  var starGeometry = new THREE.SphereGeometry(0.05, 20, 20)
+  var starMaterial = new THREE.MeshBasicMaterial( {
+    color: lightGreen,
+    side: THREE.DoubleSide
+  })
+
+
 
   // create the background
   sceneSubject = [new Background(scene)];
