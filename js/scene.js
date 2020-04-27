@@ -15,6 +15,11 @@ var ambient;
 var sceneSubject;
 var starNum = 20000;
 
+// constellations
+var aquila;
+var lyra;
+var draco;
+
 // colors
 var darkBlue = 0x001029;
 var blue = 0x0f67d4;
@@ -120,7 +125,7 @@ function createScene(){
   hemisphere = new THREE.HemisphereLight( lightBlue, darkBlue, 1);
   scene.add(hemisphere);
 
-  ambient = new THREE.AmbientLight( darkBlue, 1 );
+  ambient = new THREE.AmbientLight( darkBlue, 0.75 );
   scene.add(ambient);
 
   light = new THREE.DirectionalLight( lightBlue );
@@ -157,6 +162,21 @@ function createScene(){
     scene.add(star);
   }
 
+  // 8. Constellations
+  aquila = new Aquila(scene);
+  lyra = new Lyra(scene);
+  draco = new Draco(scene);
+
+  // var testG = new THREE.SphereGeometry(17, 20, 20);
+  // var testM = new THREE.MeshBasicMaterial( {
+  //     color: 0xffffff
+  // })
+
+  // var test = new THREE.Mesh(testG, testM)
+  // test.receiveShadow = false;
+  // test.position.set(0, 0, 0)
+  // scene.add(test)
+
   // create the background
   sceneSubject = [new Background(scene)];
 
@@ -171,6 +191,10 @@ function calculateStarPosition(mesh, angle, radius, y) {
 
 function animate(){
     var delta = clock.getDelta();
+
+    // constellations
+    aquila.update();
+    draco.update();
 
     controls.animatePlayer(delta);
 
