@@ -165,12 +165,14 @@ function createScene(){
 
   // 8. Constellations
   for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
-    var raHour = constellations[i].raHour;
-    var raMinute = constellations[i].raMinute;
-    var raSecond = constellations[i].raSecond;
-    var declinationDegree = constellations[i].declinationDegree;
-    var declinationMinute = constellations[i].declinationMinute;
-    var declinationSecond = constellations[i].declinationSecond;
+    var currentConstellation = constellations[i];
+
+    var raHour = currentConstellation.raHour;
+    var raMinute = currentConstellation.raMinute;
+    var raSecond = currentConstellation.raSecond;
+    var declinationDegree = currentConstellation.declinationDegree;
+    var declinationMinute = currentConstellation.declinationMinute;
+    var declinationSecond = currentConstellation.declinationSecond;
 
     var X = calculateCartesianX(raHour, raMinute, raSecond, 
       declinationDegree, declinationMinute, declinationSecond);
@@ -179,6 +181,22 @@ function createScene(){
       declinationDegree, declinationMinute, declinationSecond);
 
     var color = 0x000000;
+    var starColor = currentConstellation.starColor;
+    if (starColor == "White") {
+      color = 0xffffff;
+    } else if (starColor == "Orange/Red") {
+      color = 0xff5724;
+    } else if (starColor == "Red") {
+      color = 0xff0000;
+    } else if (starColor == "Yellow") {
+      color = 0xffff05;
+    } else if (starColor == "Orange") {
+      color = 0xffae00;
+    } else if (starColor == "Blue") {
+      color = 0x001aff; 
+    } else if (starColor == "Blue/White") {
+      color = 0x00eaff;
+    }
 
     var tempConstellation = new Constellation(scene, X, Y, color);
     constellationList.push(tempConstellation);

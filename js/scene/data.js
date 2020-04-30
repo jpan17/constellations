@@ -781,7 +781,7 @@ data=`[
       "declinationDegree": -9,
       "declinationMinute": 22,
       "declinationSecond": 58.3,
-      "starColor": "Green"
+      "starColor": "Blue/White"
     },
     {
       "latin": "Lupus",

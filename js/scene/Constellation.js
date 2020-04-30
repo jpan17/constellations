@@ -6,7 +6,8 @@ function Constellation (scene, x, y, color) {
     var sphereGeometry = new THREE.SphereGeometry(3, 10, 10);
     var sphereMaterial = new THREE.MeshBasicMaterial( {
         color: color,
-        wireframe: false,
+        wireframe: true,
+        wireframeLinewidth: 1,
         flatShading: true
     })
 
