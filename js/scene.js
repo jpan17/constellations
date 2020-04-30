@@ -165,6 +165,23 @@ function createScene(){
 
   // 8. Constellations
   for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
+    var raHour = constellations[i].raHour;
+    var raMinute = constellations[i].raMinute;
+    var raSecond = constellations[i].raSecond;
+    var declinationDegree = constellations[i].declinationDegree;
+    var declinationMinute = constellations[i].declinationMinute;
+    var declinationSecond = constellations[i].declinationSecond;
+
+    var X = calculateCartesianX(raHour, raMinute, raSecond, 
+      declinationDegree, declinationMinute, declinationSecond);
+    
+    var Y = calculateCartesianY(raHour, raMinute, raSecond, 
+      declinationDegree, declinationMinute, declinationSecond);
+
+    var color = 0x000000;
+
+    var tempConstellation = new Constellation(scene, X, Y, color);
+    constellationList.push(tempConstellation);
 
   }  
 
@@ -175,10 +192,46 @@ function createScene(){
 	window.addEventListener('resize', onWindowResize, false);//resize callback
 }
 
+// used this to calculate coordinates
+// http://fmwriters.com/Visionback/Issue14/wbputtingstars.htm
+function calculateCartesianX(raHour, raMinute, raSecond, 
+  declinationDegree, declinationMinute, declinationSecond) {
+
+    var A = raHour * 15 + raMinute * 0.25 + raSecond * 0.004166;
+    var sign = 1;
+    if (declinationDegree <= 0) {
+      sign = -1;
+    }
+    var B = (Math.abs(declinationDegree) + declinationMinute / 60 + declinationSecond / 3600) * sign * declinationDegree;
+    var C = 160;
+
+    return (C * Math.cos(B)) * Math.cos(A)
+
+}
+
+function calculateCartesianY(raHour, raMinute, raSecond, 
+  declinationDegree, declinationMinute, declinationSecond) {
+
+    var A = raHour * 15 + raMinute * 0.25 + raSecond * 0.004166;
+    var sign = 1;
+    if (declinationDegree <= 0) {
+      sign = -1;
+    }
+    var B = (Math.abs(declinationDegree) + declinationMinute / 60 + declinationSecond / 3600) * sign * declinationDegree;
+    var C = 160;
+
+    return (C * Math.cos(B)) * Math.sin(A)
+
+}
+
+
 function animate(){
     var delta = clock.getDelta();
 
     // constellations
+    for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
+      constellationList[i].update();
+    }
 
     controls.animatePlayer(delta);
 
