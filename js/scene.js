@@ -1,5 +1,6 @@
 /*global THREE*/
 /****************************** SCENE GLOBAL VARS ******************************/
+
 var sceneWidth;
 var sceneHeight;
 var camera;
@@ -16,9 +17,9 @@ var sceneSubject;
 var starNum = 20000;
 
 // constellations
-var aquila;
-var lyra;
-var draco;
+const NUM_CONSTELLATIONS = 88;
+var constellationList = [];
+var constellations = constellations();
 
 // colors
 var darkBlue = 0x001029;
@@ -163,19 +164,45 @@ function createScene(){
   }
 
   // 8. Constellations
-  aquila = new Aquila(scene);
-  lyra = new Lyra(scene);
-  draco = new Draco(scene);
+  for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
+    var currentConstellation = constellations[i];
 
-  // var testG = new THREE.SphereGeometry(17, 20, 20);
-  // var testM = new THREE.MeshBasicMaterial( {
-  //     color: 0xffffff
-  // })
+    var raHour = currentConstellation.raHour;
+    var raMinute = currentConstellation.raMinute;
+    var raSecond = currentConstellation.raSecond;
+    var declinationDegree = currentConstellation.declinationDegree;
+    var declinationMinute = currentConstellation.declinationMinute;
+    var declinationSecond = currentConstellation.declinationSecond;
 
-  // var test = new THREE.Mesh(testG, testM)
-  // test.receiveShadow = false;
-  // test.position.set(0, 0, 0)
-  // scene.add(test)
+    var X = calculateCartesianX(raHour, raMinute, raSecond, 
+      declinationDegree, declinationMinute, declinationSecond);
+    
+    var Y = calculateCartesianY(raHour, raMinute, raSecond, 
+      declinationDegree, declinationMinute, declinationSecond);
+
+    var color = 0x000000;
+    var starColor = currentConstellation.starColor;
+    if (starColor == "White") {
+      color = 0xffffff;
+    } else if (starColor == "Orange/Red") {
+      color = 0xffbda1;
+    } else if (starColor == "Red") {
+      color = 0xffbb9e;
+    } else if (starColor == "Yellow") {
+      color = 0xfbffc9;
+    } else if (starColor == "Orange") {
+      color = 0xffdf87;
+    } else if (starColor == "Blue") {
+      color = 0xb3c2ff; 
+    } else if (starColor == "Blue/White") {
+      color = 0xc9f2ff;
+    }
+
+    var tempConstellation = new Constellation(scene, X, Y, color);
+    constellationList.push(tempConstellation);
+
+  }  
+
 
   // create the background
   sceneSubject = [new Background(scene)];
@@ -183,18 +210,46 @@ function createScene(){
 	window.addEventListener('resize', onWindowResize, false);//resize callback
 }
 
-function calculateStarPosition(mesh, angle, radius, y) {
-  const x = radius * Math.cos(angle)
-  const z = radius * Math.sin(angle)
-  mesh.position.set(x, y, z)
+// used this to calculate coordinates
+// http://fmwriters.com/Visionback/Issue14/wbputtingstars.htm
+function calculateCartesianX(raHour, raMinute, raSecond, 
+  declinationDegree, declinationMinute, declinationSecond) {
+
+    var A = raHour * 15 + raMinute * 0.25 + raSecond * 0.004166;
+    var sign = 1;
+    if (declinationDegree <= 0) {
+      sign = -1;
+    }
+    var B = (Math.abs(declinationDegree) + declinationMinute / 60 + declinationSecond / 3600) * sign * declinationDegree;
+    var C = 160;
+
+    return (C * Math.cos(B)) * Math.cos(A)
+
 }
+
+function calculateCartesianY(raHour, raMinute, raSecond, 
+  declinationDegree, declinationMinute, declinationSecond) {
+
+    var A = raHour * 15 + raMinute * 0.25 + raSecond * 0.004166;
+    var sign = 1;
+    if (declinationDegree <= 0) {
+      sign = -1;
+    }
+    var B = (Math.abs(declinationDegree) + declinationMinute / 60 + declinationSecond / 3600) * sign * declinationDegree;
+    var C = 160;
+
+    return (C * Math.cos(B)) * Math.sin(A)
+
+}
+
 
 function animate(){
     var delta = clock.getDelta();
 
     // constellations
-    aquila.update();
-    draco.update();
+    for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
+      constellationList[i].update();
+    }
 
     controls.animatePlayer(delta);
 
