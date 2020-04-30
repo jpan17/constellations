@@ -17,9 +17,9 @@ var sceneSubject;
 var starNum = 20000;
 
 // constellations
-var aquila;
-var lyra;
-var draco;
+const NUM_CONSTELLATIONS = 88;
+var constellationList = [];
+var constellations = constellations();
 
 // colors
 var darkBlue = 0x001029;
@@ -163,13 +163,10 @@ function createScene(){
     scene.add(star);
   }
 
-  // 8. Test Stars
-  aquila = new Aquila(scene);
-  lyra = new Lyra(scene);
-  draco = new Draco(scene);
-
   // 8. Constellations
-  
+  for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
+
+  }  
 
 
   // create the background
@@ -178,18 +175,10 @@ function createScene(){
 	window.addEventListener('resize', onWindowResize, false);//resize callback
 }
 
-function calculateStarPosition(mesh, angle, radius, y) {
-  const x = radius * Math.cos(angle)
-  const z = radius * Math.sin(angle)
-  mesh.position.set(x, y, z)
-}
-
 function animate(){
     var delta = clock.getDelta();
 
     // constellations
-    aquila.update();
-    draco.update();
 
     controls.animatePlayer(delta);
 
