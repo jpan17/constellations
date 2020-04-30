@@ -20,6 +20,7 @@ var starNum = 30000;
 const NUM_CONSTELLATIONS = 88;
 var constellationList = [];
 var constellationNames = [];
+var constellationDescriptions = [];
 var constellationRadii = [];
 var constellations = constellations();
 
@@ -228,6 +229,7 @@ function createScene(){
     constellationList.push(tempConstellation);
     constellationRadii.push(radius);
     constellationNames.push(currentConstellation.latin);
+    constellationDescriptions.push(currentConstellation.english)
 
   }
 
@@ -280,7 +282,7 @@ function getConstellation() {
 
       // display text
       blocker.style.display = '';
-      instructions.innerHTML = "<br><strong>" + constellationNames[i] + "</strong>";
+      instructions.innerHTML = "<br><strong>" + constellationNames[i] + "</strong><br><strong>" + constellationDescriptions[i] + "</strong>";
       instructions.style.color = 'White';
       instructions.style.display = '';
       

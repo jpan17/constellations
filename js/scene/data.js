@@ -257,7 +257,7 @@ data=`[
     },
     {
       "latin": "Carina",
-      "english": "Keel of Argonauts ship",
+      "english": "Keel of Argonauts\' ship",
       "objectType": "Inanimate",
       "area": 494.184,
       "mainStars": 9,
@@ -385,7 +385,7 @@ data=`[
     },
     {
       "latin": "Coma Berenices",
-      "english": "Berenices hair",
+      "english": "Berenice\'s hair",
       "objectType": "Inanimate",
       "area": 386.475,
       "mainStars": 3,
@@ -417,7 +417,7 @@ data=`[
     },
     {
       "latin": "Corona Borealis N",
-      "english": "orthern crown",
+      "english": "Northern crown",
       "objectType": "Inanimate",
       "area": 178.71,
       "mainStars": 8,
@@ -897,7 +897,7 @@ data=`[
     },
     {
       "latin": "Norma",
-      "english": "Carpenters Level",
+      "english": "Carpenter\'s Level",
       "objectType": "Inanimate",
       "area": 165.29,
       "mainStars": 4,
@@ -993,7 +993,7 @@ data=`[
     },
     {
       "latin": "Perseus",
-      "english": "Perseus hero who saved Andromeda",
+      "english": "Perseus, hero who saved Andromeda",
       "objectType": "Human",
       "area": 614.997,
       "mainStars": 19,
@@ -1073,7 +1073,7 @@ data=`[
     },
     {
       "latin": "Puppis",
-      "english": "Stern of the Argonauts ship",
+      "english": "Stern of the Argonauts\' ship",
       "objectType": "Inanimate",
       "area": 673.434,
       "mainStars": 9,
@@ -1089,7 +1089,7 @@ data=`[
     },
     {
       "latin": "Pyxis",
-      "english": "Compass on the Argonauts ship",
+      "english": "Compass on the Argonauts\' ship",
       "objectType": "Inanimate",
       "area": 220.833,
       "mainStars": 3,
@@ -1169,7 +1169,7 @@ data=`[
     },
     {
       "latin": "Sculptor",
-      "english": "Sculptors tools",
+      "english": "Sculptor\'s tools",
       "objectType": "Inanimate",
       "area": 474.764,
       "mainStars": 4,
@@ -1345,7 +1345,7 @@ data=`[
     },
     {
       "latin": "Vela",
-      "english": "Sail of the Argonauts ship",
+      "english": "Sail of the Argonauts\' ship",
       "objectType": "Inanimate",
       "area": 499.649,
       "mainStars": 5,

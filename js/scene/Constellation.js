@@ -40,8 +40,8 @@ function Constellation (scene, x, y, color, numStars, rotationSpeed,
     scene.add(object);
 
   this.update = function() {
-      this.sphere.rotation.x += rotationSpeed;
-      this.sphereGrid.rotation.x += rotationSpeed;
+      this.sphere.rotation.y += rotationSpeed;
+      this.sphereGrid.rotation.y += rotationSpeed;
   }
 
 }
