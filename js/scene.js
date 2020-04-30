@@ -1,5 +1,6 @@
 /*global THREE*/
 /****************************** SCENE GLOBAL VARS ******************************/
+
 var sceneWidth;
 var sceneHeight;
 var camera;
@@ -162,20 +163,14 @@ function createScene(){
     scene.add(star);
   }
 
-  // 8. Constellations
+  // 8. Test Stars
   aquila = new Aquila(scene);
   lyra = new Lyra(scene);
   draco = new Draco(scene);
 
-  // var testG = new THREE.SphereGeometry(17, 20, 20);
-  // var testM = new THREE.MeshBasicMaterial( {
-  //     color: 0xffffff
-  // })
+  // 8. Constellations
+  
 
-  // var test = new THREE.Mesh(testG, testM)
-  // test.receiveShadow = false;
-  // test.position.set(0, 0, 0)
-  // scene.add(test)
 
   // create the background
   sceneSubject = [new Background(scene)];
