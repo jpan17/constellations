@@ -210,11 +210,11 @@ function createScene(){
     var objectType = currentConstellation.objectType;
     var rotationSpeed = 0;
     if (objectType == "Inanimate") {
-      rotationSpeed = 0.01;
+      rotationSpeed = 0;
     } else if (objectType == "Human") {
-      rotationSpeed = 0.05;
+      rotationSpeed = 0.01;
     } else if (objectType == "Animal") {
-      rotationSpeed = 0.88;
+      rotationSpeed = 0.05;
     } else if (objectType == "Mythological") {
       rotationSpeed = 0.1;
     } else {
