@@ -20,6 +20,7 @@ var starNum = 30000;
 const NUM_CONSTELLATIONS = 88;
 var constellationList = [];
 var constellationNames = [];
+var constellationRadii = [];
 var constellations = constellations();
 
 // colors
@@ -50,7 +51,7 @@ var frontDist = -200;
 // obstacles in the game
 var collidableObjects = []; // An array of collidable objects used later
 var PLAYERCOLLISIONDIST = 5;
-var CONSTELLATION_COLLISION_DIST = 3;
+var CONSTELLATION_COLLISION_DIST = 4;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -225,6 +226,7 @@ function createScene(){
     var tempConstellation = new Constellation(scene, X, Y, color, numStars,
       rotationSpeed, radius);
     constellationList.push(tempConstellation);
+    constellationRadii.push(radius);
     constellationNames.push(currentConstellation.latin);
 
   }
@@ -268,11 +270,13 @@ function calculateCartesianY(raHour, raMinute, raSecond,
 }
 
 function getConstellation() {
-  let currentPos = controls.getObject().position;
+  // console.log("here")
+  var currentPos = controls.getObject().position;
 
-  for (let i = 0; i < constellationList.length; i++) {
-    let dist = new THREE.Vector3().subVectors(constellationList[i].object.position, currentPos).length();
-    if (dist < CONSTELLATION_COLLISION_DIST) {
+  for (var i = 0; i < constellationList.length; i++) {
+    var dist = new THREE.Vector3().subVectors(constellationList[i].object.position, currentPos).length();
+    // console.log(dist)
+    if (dist < constellationRadii[i] + CONSTELLATION_COLLISION_DIST) {
 
       // display text
       blocker.style.display = '';
@@ -280,7 +284,7 @@ function getConstellation() {
       instructions.style.color = 'White';
       instructions.style.display = '';
       
-      setTimeout(fade_out, 3000);
+      setTimeout(fade_out, 2000);
 
     }
   }

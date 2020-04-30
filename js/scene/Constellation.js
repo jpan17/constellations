@@ -20,11 +20,11 @@ function Constellation (scene, x, y, color, numStars, rotationSpeed,
 
     var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
     sphere.receiveShadow = false;
-    sphere.position.set(x, radius + 2, y)
+    // sphere.position.set(x, radius + 2, y)
 
     var sphereGrid = new THREE.Mesh(sphereGridGeometry, sphereGridMaterial)
     sphereGrid.receiveShadow = false;
-    sphereGrid.position.set(x, radius + 2, y)
+    // sphereGrid.position.set(x, radius + 2, y)
 
     object.add(sphere)
     object.add(sphereGrid)
@@ -32,6 +32,10 @@ function Constellation (scene, x, y, color, numStars, rotationSpeed,
     this.sphere = sphere;
     this.sphereGrid = sphereGrid;
     collidableObjects.push(this.sphere)
+
+    object.position.x = x;
+    object.position.y = radius + 2;
+    object.position.z = y;
 
     scene.add(object);
 
