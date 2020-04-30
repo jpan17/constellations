@@ -185,17 +185,17 @@ function createScene(){
     if (starColor == "White") {
       color = 0xffffff;
     } else if (starColor == "Orange/Red") {
-      color = 0xdb491d;
+      color = 0xffbda1;
     } else if (starColor == "Red") {
-      color = 0xb81616;
+      color = 0xffbb9e;
     } else if (starColor == "Yellow") {
-      color = 0xd6cd1a;
+      color = 0xfbffc9;
     } else if (starColor == "Orange") {
-      color = 0xd9a432;
+      color = 0xffdf87;
     } else if (starColor == "Blue") {
-      color = 0x0009b0; 
+      color = 0xb3c2ff; 
     } else if (starColor == "Blue/White") {
-      color = 0x429edb;
+      color = 0xc9f2ff;
     }
 
     var tempConstellation = new Constellation(scene, X, Y, color);
