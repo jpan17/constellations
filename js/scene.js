@@ -14,11 +14,13 @@ var light;
 var hemisphere;
 var ambient;
 var sceneSubject;
-var starNum = 20000;
+var starNum = 30000;
 
 // constellations
 const NUM_CONSTELLATIONS = 88;
 var constellationList = [];
+var constellationNames = [];
+var constellationRadii = [];
 var constellations = constellations();
 
 // colors
@@ -48,10 +50,8 @@ var frontDist = -200;
 
 // obstacles in the game
 var collidableObjects = []; // An array of collidable objects used later
-var MAXLIGHTORBS = 70;
 var PLAYERCOLLISIONDIST = 5;
-var PLAYERLIGHTDIST = 6;
-var PLAYERDOORDIST = 7;
+var CONSTELLATION_COLLISION_DIST = 4;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -167,6 +167,7 @@ function createScene(){
   for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
     var currentConstellation = constellations[i];
 
+    // determine coordinates on map
     var raHour = currentConstellation.raHour;
     var raMinute = currentConstellation.raMinute;
     var raSecond = currentConstellation.raSecond;
@@ -180,6 +181,7 @@ function createScene(){
     var Y = calculateCartesianY(raHour, raMinute, raSecond, 
       declinationDegree, declinationMinute, declinationSecond);
 
+    // determine color
     var color = 0x000000;
     var starColor = currentConstellation.starColor;
     if (starColor == "White") {
@@ -196,13 +198,38 @@ function createScene(){
       color = 0xb3c2ff; 
     } else if (starColor == "Blue/White") {
       color = 0xc9f2ff;
+    } else {
+      console.log(currentConstellation.latin)
     }
 
-    var tempConstellation = new Constellation(scene, X, Y, color);
+    // determine vertex length
+    var numStars = currentConstellation.mainStars * 2;
+
+    // determine rotation speed
+    var objectType = currentConstellation.objectType;
+    var rotationSpeed = 0;
+    if (objectType == "Inanimate") {
+      rotationSpeed = 0.01;
+    } else if (objectType == "Human") {
+      rotationSpeed = 0.05;
+    } else if (objectType == "Animal") {
+      rotationSpeed = 0.88;
+    } else if (objectType == "Mythological") {
+      rotationSpeed = 0.1;
+    } else {
+      console.log(currentConstellation.latin);
+    }
+
+    // determine radius
+    var radius = currentConstellation.area / 200;
+
+    var tempConstellation = new Constellation(scene, X, Y, color, numStars,
+      rotationSpeed, radius);
     constellationList.push(tempConstellation);
+    constellationRadii.push(radius);
+    constellationNames.push(currentConstellation.latin);
 
-  }  
-
+  }
 
   // create the background
   sceneSubject = [new Background(scene)];
@@ -242,14 +269,36 @@ function calculateCartesianY(raHour, raMinute, raSecond,
 
 }
 
+function getConstellation() {
+  // console.log("here")
+  var currentPos = controls.getObject().position;
 
-function animate(){
+  for (var i = 0; i < constellationList.length; i++) {
+    var dist = new THREE.Vector3().subVectors(constellationList[i].object.position, currentPos).length();
+    // console.log(dist)
+    if (dist < constellationRadii[i] + CONSTELLATION_COLLISION_DIST) {
+
+      // display text
+      blocker.style.display = '';
+      instructions.innerHTML = "<br><strong>" + constellationNames[i] + "</strong>";
+      instructions.style.color = 'White';
+      instructions.style.display = '';
+      
+      setTimeout(fade_out, 2000);
+
+    }
+  }
+}
+
+function animate() {
     var delta = clock.getDelta();
 
     // constellations
     for (var i = 0; i < NUM_CONSTELLATIONS; i++) {
       constellationList[i].update();
     }
+
+    getConstellation();
 
     controls.animatePlayer(delta);
 
