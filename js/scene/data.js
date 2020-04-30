@@ -242,7 +242,7 @@ data=`[
     {
       "latin": "Capricornus",
       "english": "Sea goat",
-      "objectType": "Mythologial",
+      "objectType": "Mythological",
       "area": 413.947,
       "mainStars": 9,
       "ra": "21h 47m 02.29s",
